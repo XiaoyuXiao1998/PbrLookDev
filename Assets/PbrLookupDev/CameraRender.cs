@@ -41,14 +41,7 @@ public partial class CameraRenderer {
 	//            Shadow Caster      **********
 	//*****************************************
 	private ShadowCasterPass shadowCastPass = new ShadowCasterPass();
-	
-	//*****************************************
-	//            TAA Pass           **********
-	//*****************************************
-	private TAA taa = new TAA(SAMPLE_METHOD.HALTON_X2_Y3);
-	
-	
-	
+
 	//*****************************************
 	//            SSAO Pass           *********
 	//*****************************************
@@ -178,11 +171,6 @@ public partial class CameraRenderer {
 			cullingResults, ref drawingSettings, ref filteringSettings
 		);
 
-		if (Application.isPlaying && camera.cameraType == CameraType.Game)
-		{
-		//	taa.TAAPass(ref context, ref camera);
-		}
-		
 		context.DrawSkybox(camera);
 		
 		
