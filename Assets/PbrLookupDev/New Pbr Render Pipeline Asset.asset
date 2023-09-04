@@ -17,12 +17,17 @@ MonoBehaviour:
     globalEnvMapDiffuse: {fileID: 8900000, guid: 6b41b930ff58e2a41b64ba69eac6140f, type: 3}
     globalEnvMapSpecular: {fileID: 8900000, guid: 7fd92ec7c0808204f96a8f1e502b99d8, type: 3}
   ssaoSettings:
-    sampleCount: 20
-    radius: 0.388
-    rangeCheck: 0.8
-    aoInt: 3.06
-    blurRadius: 1.559
-    bilaterFilterFactor: 0.493
+    sampleCount: 30
+    radius: 0.201
+    rangeCheck: 4.23
+    aoInt: 3.84
+    blurRadius: 2.135
+    bilaterFilterFactor: 0.095
     aoColor: {r: 0, g: 0, b: 0, a: 1}
     aoOnly: 0
     useAO: 1
+  physicalCameraSettings:
+    aperture: 16
+    shutterSpeed: 0.02
+    iso: 24274
+    middleGrey: 1

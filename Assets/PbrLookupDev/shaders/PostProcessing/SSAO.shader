@@ -1,5 +1,10 @@
 Shader "Hidden/SSAO"
 {
+    
+        Properties
+    {
+        _MainTex ("Texture", 2D) = "white" {}
+    }
     SubShader
     {
             CGINCLUDE
@@ -24,8 +29,10 @@ Shader "Hidden/SSAO"
                 o.uv = v.uv;
                 return o;
             }
+            Texture2D _MainTex;
+            SamplerState sampler_MainTex;
             
-            sampler2D _ColorTex, _AOTex;; 
+            sampler2D  _AOTex; 
             float _SampleCount, _Radius, _RangeCheck, _AOInt;
             float4x4 _VMatrix, _PMatrix;
             float4 _AOCol;
@@ -46,11 +53,6 @@ Shader "Hidden/SSAO"
                 float3x3 TBN_Line = float3x3(wTan, wBin, wNor);
 
                 float ao = 0;
-
-                float debug_sample_depth = 0;;
-                float debug_sample_z = 0;
-                float debug_value = 0;
-
          
                 
                 int sampleCount = (int)_SampleCount;
@@ -80,10 +82,6 @@ Shader "Hidden/SSAO"
                  
                     float selfCheck = (sampleDepth < eyeDepth - 0.08) ?  1 : 0;                    
                     ao += (sampleDepth < sampleZ) ?  1 * rangeCheck * selfCheck * _AOInt * weight : 0;
-                    debug_value += (sampleDepth < sampleZ) ?  1 * selfCheck * _AOInt * weight: 0 ;
-
-                    debug_sample_depth += sampleDepth;
-                    debug_sample_z += sampleZ;
                 }
 
        
@@ -110,13 +108,14 @@ Shader "Hidden/SSAO"
             #pragma vertex vert
             #pragma fragment frag_final 
 
-            fixed4 frag_final (v2f i) : SV_Target
+            float4 frag_final (v2f i) : SV_Target
             {
-                float4 scrTex = tex2D(_ColorTex, i.uv);
-                float4 aoTex = tex2D(_AOTex, i.uv);
-                //return aoTex;
-                float4 finalCol = lerp(scrTex * _AOCol, scrTex, aoTex.x);
-                return finalCol;
+                float4 srcTex = _MainTex.Sample(sampler_MainTex,i.uv);
+
+               // return srcTex;
+                float4 aoTex = tex2D(_AOTex, i.uv) ;
+                srcTex.rgb *= clamp(aoTex.rgb,0,1);
+                return srcTex;
             }
 
             ENDCG

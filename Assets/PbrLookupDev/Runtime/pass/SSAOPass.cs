@@ -35,7 +35,7 @@ public class SSAO
     }
 
 
-    public void excute(RenderTexture source,RenderTexture desc,ref Camera camera, ref ScriptableRenderContext context)
+    public void excute(RenderTexture source,int desc,ref Camera camera, ref ScriptableRenderContext context)
     {
         CommandBuffer cmd = CommandBufferPool.Get(profilerTag);
         if (mat_ao == null)
@@ -67,9 +67,8 @@ public class SSAO
             
             cmd.SetGlobalTexture("_AOTex", temp1);
             
-          //  mat_blur.SetTexture("_AOTex", temp1);
+     
             cmd.Blit(temp1, temp2, mat_blur, 0);
-            // mat_blur.SetTexture("_AOTex", temp2);
             cmd.SetGlobalTexture("_AOTex", temp2);
              
              RenderTexture temp3 = RenderTexture.GetTemporary(camera.pixelWidth, camera.pixelHeight);
@@ -77,7 +76,6 @@ public class SSAO
             
 
             mat_ao.SetTexture("_AOTex", temp3);
-            mat_ao.SetTexture("_ColorTex",source);
             cmd.Blit(source,desc , mat_ao, 1);
 
             RenderTexture.ReleaseTemporary(temp1);

@@ -46,6 +46,11 @@ public partial class CameraRenderer {
 	//            SSAO Pass           *********
 	//*****************************************
 	private SSAO ssao = new SSAO();
+	
+	//*****************************************
+	//            SSAO Pass           *********
+	//*****************************************
+	private PostPrecess PostPrecesspass = new PostPrecess();
 
 
 	public void Init()
@@ -63,6 +68,7 @@ public partial class CameraRenderer {
 		
 		
 		ssao.Setup(gbuffers[1],gdepth);
+		PostPrecesspass.Setup();
 
 	}
 
@@ -93,17 +99,27 @@ public partial class CameraRenderer {
 		//*******************************caster shader********************************
 		shadowCastPass.Execute(context,camera,ref cullingResults, ref lighting);
 		
+		//*******************************light Pass ***********************************
 		buffer.EndSample(SampleName);
 		Setup();
 		DrawVisibleGeometry();
-
+		
+		;
+		//*******************************SSAO Pass ***********************************
 
 		if (!PbrRenderPipeline.ssaoSettings.IsUnityNull() && PbrRenderPipeline.ssaoSettings.useAO )
 		{
-			ssao.excute(gbuffers[0], camera.targetTexture, ref camera, ref context);
+			ssao.excute(gbuffers[0], frameBufferId, ref camera, ref context);
 		}
-		//buffer.Blit(gbuffers[0],camera.targetTexture);
+		else
+		{
+			buffer.Blit(gbuffers[0],frameBufferId);
+		}
+
 		
+		//*******************************Post Process Pass ***************************
+		PostPrecesspass.excute(frameBufferId,camera.targetTexture,ref camera, ref context);
+
 		DrawUnsupportedShaders();
 		
 		DrawGizmos();

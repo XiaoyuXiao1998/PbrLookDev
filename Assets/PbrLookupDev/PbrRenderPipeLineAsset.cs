@@ -7,11 +7,12 @@ public class PbrRenderPipelineAsset : RenderPipelineAsset
 {
 	public PbrRenderPipelineSettings pbrRenderPipelineSettings;
 	public SSAOSettings ssaoSettings;
+	public PhysicalCameraSettings physicalCameraSettings;
 
     protected override RenderPipeline CreatePipeline()
     {
 
-        return new PbrRenderPipeline(pbrRenderPipelineSettings,ssaoSettings);
+        return new PbrRenderPipeline(pbrRenderPipelineSettings,ssaoSettings,physicalCameraSettings);
     }
      
        
@@ -40,5 +41,18 @@ public class SSAOSettings
 	public Color aoColor = Color.black;
 	public bool aoOnly = false;
 	public bool useAO = true;
+}
+
+
+
+[Serializable]
+
+public class PhysicalCameraSettings
+{
+	[Header("Physical Camera Settings")]
+	[Range(1f, 16f)]public float aperture = 1.4f;
+	[Range(0.001f, 1.0f)]public float shutterSpeed = 0.03f;
+	[Range(0f, 100000f)]public float iso = 6000.0f;
+	[Range(0f, 10f)]public float middleGrey = 1f;
 }
 

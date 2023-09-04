@@ -10,6 +10,7 @@ public class PbrRenderPipeline : RenderPipeline
     CameraRenderer renderer = new CameraRenderer();
     public static PbrRenderPipelineSettings settings;
     public static SSAOSettings ssaoSettings;
+    public static PhysicalCameraSettings physicalCameraSettings;
     public static PbrRenderPipeline instance { get; private set; }
 
     public PipelineProcessor pipelineProcessor;
@@ -22,13 +23,14 @@ public class PbrRenderPipeline : RenderPipeline
     
     //construction function of render pipeline:
     
-    public PbrRenderPipeline(PbrRenderPipelineSettings settings, SSAOSettings ssaoSettings)
+    public PbrRenderPipeline(PbrRenderPipelineSettings settings, SSAOSettings ssaoSettings, PhysicalCameraSettings physicalCameraSettings)
     {
       
         GraphicsSettings.lightsUseLinearIntensity = true;
         PbrRenderPipeline.instance = this;
         PbrRenderPipeline.settings = settings;
         PbrRenderPipeline.ssaoSettings = ssaoSettings;
+        PbrRenderPipeline.physicalCameraSettings = physicalCameraSettings;
         pipelineProcessor = new PipelineProcessor();
         
         renderer.Init();
