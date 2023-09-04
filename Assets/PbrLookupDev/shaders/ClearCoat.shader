@@ -4,8 +4,6 @@ Shader "PbrDev/ClearCoat"
     {
         _MainTex ("Texture", 2D) = "white" {}
         _BaseColor("Color", Color) = (0.5, 0.5, 0.5, 1.0)
-		_Cutoff ("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
-		[Toggle(_CLIPPING)] _Clipping ("Alpha Clipping", Float) = 0
 
 		_Metallic ("Metallic", Range(0, 1)) = 0
 		_Smoothness ("Smoothness", Range(0, 1)) = 0.5
@@ -14,12 +12,8 @@ Shader "PbrDev/ClearCoat"
     	_ClearCoatSmoothness("ClearCoatSmoothness", Range(0, 1)) = 0.5
     	
     	_SkyIntensity("Sky Intensity", Range(0, 2)) = 0.5
-    	
 
-
-		[Toggle(_PREMULTIPLY_ALPHA)] _PremulAlpha ("Premultiply Alpha", Float) = 0
-
-		[Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Src Blend", Float) = 1
+        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Src Blend", Float) = 1
 		[Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Dst Blend", Float) = 0
 		[Enum(Off, 0, On, 1)] _ZWrite ("Z Write", Float) = 1
     }
@@ -68,7 +62,6 @@ Shader "PbrDev/ClearCoat"
 
             UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
 	        UNITY_DEFINE_INSTANCED_PROP(float4, _BaseColor)
-	        UNITY_DEFINE_INSTANCED_PROP(float, _Cutoff)
 	        UNITY_DEFINE_INSTANCED_PROP(float, _Metallic)
 	        UNITY_DEFINE_INSTANCED_PROP(float, _Smoothness)
 	         UNITY_DEFINE_INSTANCED_PROP(float, _ClearCoat)
@@ -96,8 +89,7 @@ Shader "PbrDev/ClearCoat"
 
                 //*********************** get material properties *********************
 
-            	//float2 uv = i.uv;
-                float3 albedo = _BaseColor.rgb;
+            	float3 albedo = _BaseColor.rgb * tex2D(_MainTex,i.uv).rgb;
                 float metallic = _Metallic;
                 float roughness = 1.0 - _Smoothness;
 
